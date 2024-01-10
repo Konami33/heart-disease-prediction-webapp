@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 
 
 def home():
-    # create streamlit interface, asome info about the app
+    # create streamlit interface, and some info about the app
     st.image("image/home.jpg")
 
     st.write("""
@@ -82,6 +82,10 @@ def predict():
     kidneyDisease = st.selectbox("Do you have kidney disease?", options=("No", "Yes"))
     skinCancer = st.selectbox("Do you have skin cancer?", options=("No", "Yes"))
 
+    #Model selection
+    selectModel = st.selectbox("Select your preferable machine learning model", options=("Logistic Regression", "KNN", "XGB"))
+    print(selectModel)
+
     dataToPredic = pd.DataFrame({
         "BMI": [BMI],
         "Smoking": [Smoking],
@@ -145,19 +149,39 @@ def predict():
 
     # Load the previously saved machine learning model
     filename = 'LogRegModel.pkl'
+    filename1 = 'knn.pkl'
+    filename2 = 'xgb.pkl'
+
     loaded_model = pickle.load(open(filename, 'rb'))
-    print(loaded_model)
-    Result = loaded_model.predict(dataToPredic)
-    ResultProb = loaded_model.predict_proba(dataToPredic)
-    ResultProb1 = round(ResultProb[0][1] * 100, 2)
+    loaded_model1 = pickle.load(open(filename1, 'rb'))
+    loaded_model2 = pickle.load(open(filename2, 'rb'))
+
+    finalResult = 0.0
+    #print(loaded_model)
+    if(selectModel == 'Logistic Regression'):
+        Result = loaded_model.predict(dataToPredic)
+        ResultProb = loaded_model.predict_proba(dataToPredic)
+        finalResult = round(ResultProb[0][1] * 100, 2)
+        print("logical regression", finalResult)
+
+    elif(selectModel == 'KNN'):
+        knnResult = loaded_model1.predict(dataToPredic)
+        knnResult1 = loaded_model.predict_proba(dataToPredic)
+        finalResult = round(knnResult1[0][1] * 100, 2)
+        print("knn", finalResult)
+    else:
+        xgbResult = loaded_model2.predict(dataToPredic)
+        xgbResult1 = loaded_model.predict_proba(dataToPredic)
+        finalResult = round(xgbResult1[0][1] * 100, 2)
+        print("xgb", finalResult)
 
     # Calculate the probability of getting heart disease
     if st.button('PREDICT'):
         # st.write('your prediction:', Result, round(ResultProb[0][1] * 100, 2))
-        if (ResultProb1 > 30):
-            st.title(f'You have a {ResultProb1} % chance of getting a heart disease')
+        if (finalResult > 30):
+            st.title(f'You have a {finalResult} % chance of getting a heart disease')
         else:
-            st.title(f'You have a {ResultProb1} % chance of getting a heart disease')
+            st.title(f'You have a {finalResult} % chance of getting a heart disease')
 
 
 def blog():

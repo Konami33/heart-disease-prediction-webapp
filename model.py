@@ -66,12 +66,56 @@ df['BMI'].mask(df['BMI'].between(25,30), 2, inplace=True)
 df['BMI'].mask(df['BMI']  > 30, 3, inplace=True)
 
 # Split the data into training and testing
-X_train,X_test,y_train,y_test = train_test_split(df,target,test_size=50,random_state=2)
+X_train,X_test,y_train,y_test = train_test_split(df, target, test_size=1000, random_state=0)
 
 # Train a logistic regression model on the training set
 LogRegModel=LogisticRegression()
 LogRegModel.fit(X_train, y_train)
 
+y_pred = LogRegModel.predict(X_test)
+from sklearn.metrics import accuracy_score
+LogRegModelAccuraccy = accuracy_score(y_test, y_pred)
+print("Logistic Regression model accuracy: {:.2f}%".format(LogRegModelAccuraccy * 100))
 # Save the model using pickle
 with open('LogRegModel.pkl', 'wb') as f:
     pickle.dump(LogRegModel, f)
+
+#Train a knn model on the training set
+from sklearn.neighbors import KNeighborsClassifier
+knn=KNeighborsClassifier()
+knn.fit(X_train,y_train)
+print("KNN Accuracy:{:.2f}%".format(knn.score(X_test,y_test)*100))
+
+with open('knn.pkl', 'wb') as f1:
+    pickle.dump(knn, f1)
+
+#Train a XGB model on the the training set
+from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score
+
+# Assuming X and y are your features and target variable
+#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Convert target variable to numerical values using LabelEncoder
+label_encoder = LabelEncoder()
+y_train_encoded = label_encoder.fit_transform(y_train)
+y_test_encoded = label_encoder.transform(y_test)
+
+# XGBoost Classifier
+xgb = XGBClassifier()
+xgb.fit(X_train, y_train_encoded)
+
+# Predictions on the test set
+y_pred_encoded = xgb.predict(X_test)
+
+# Decode predictions back to original labels if necessary
+y_pred = label_encoder.inverse_transform(y_pred_encoded)
+
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("XGB Accuracy: {:.2f}%".format(accuracy * 100))
+
+with open('xgb.pkl', 'wb') as f2:
+    pickle.dump(xgb, f2)
