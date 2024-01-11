@@ -1,6 +1,6 @@
-import  streamlit as st
+import streamlit as st
 import numpy as np
-import pandas  as pd
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import pickle
@@ -83,7 +83,7 @@ def predict():
     skinCancer = st.selectbox("Do you have skin cancer?", options=("No", "Yes"))
 
     #Model selection
-    selectModel = st.selectbox("Select your preferable machine learning model", options=("Logistic Regression", "KNN", "XGB"))
+    selectModel = st.selectbox("Select your preferable machine learning model", options=("Logistic Regression (Recommended)", "k-NN", "XGBoost"))
     print(selectModel)
 
     dataToPredic = pd.DataFrame({
@@ -158,13 +158,13 @@ def predict():
 
     finalResult = 0.0
     #print(loaded_model)
-    if(selectModel == 'Logistic Regression'):
+    if(selectModel == 'Logistic Regression (Recommended)'):
         Result = loaded_model.predict(dataToPredic)
         ResultProb = loaded_model.predict_proba(dataToPredic)
         finalResult = round(ResultProb[0][1] * 100, 2)
         print("logical regression", finalResult)
 
-    elif(selectModel == 'KNN'):
+    elif(selectModel == 'k-NN'):
         knnResult = loaded_model1.predict(dataToPredic)
         knnResult1 = loaded_model.predict_proba(dataToPredic)
         finalResult = round(knnResult1[0][1] * 100, 2)
@@ -308,5 +308,5 @@ def about():
         The app is built based on the 2020 annual CDC survey data of 400k  adults related to their health status,
         using machine learning algorithm called logistic regression with an accuracy of 88%.
         To learn more about the data, check the following link: [Key Indicators of Heart Disease](https://www.kaggle.com/datasets/kamilpytlak/personal-key-indicators-of-heart-disease). 
-        If you are interested to check my code, check my github using the following link: [Github](https://github.com/lamisghoualmi/App-Personal-Key-Indicators-of-Heart-Disease). Note: this results are not equivalent to a medical diagnosis!  
+        If you are interested to check my code, check my github using the following link: [Github](https://github.com/Konami33/heart-disease-prediction-webapp). Note: this results are not equivalent to a medical diagnosis!  
         """)

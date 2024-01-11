@@ -3,6 +3,16 @@ import streamlit as st
 from datetime import datetime
 from temp import home, predict, blog, about
 
+
+#Page configuration
+st.set_page_config(
+    page_title="Heart Disease Predictor",
+    page_icon="🤍",
+    layout="wide",
+    initial_sidebar_state="expanded")
+
+#alt.themes.enable("dark")
+
 firebaseConfig = {
   'apiKey': "AIzaSyByvsc3esXR7wkLmuLdMtdEAFd1wBpXYzc",
   'authDomain': "heart-disease-prediction-8b96b.firebaseapp.com",
@@ -29,6 +39,8 @@ st.sidebar.title("My App")
 choice = st.sidebar.selectbox('Login/Register', ["Login", "Register"])
 email = st.sidebar.text_input("Enter your email")
 password = st.sidebar.text_input("Enter your password", type='password')
+
+#st.button("Reset", type="primary")
 
 
 if choice == "Register":
