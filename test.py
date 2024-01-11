@@ -1,4 +1,4 @@
-import pyrebase
+from pyrebase import pyrebase
 import streamlit as st
 from datetime import datetime
 from temp import home, predict, blog, about
@@ -23,6 +23,8 @@ firebaseConfig = {
   'appId': "1:213918288033:web:7801b15607e386b3c348e0",
   'measurementId': "G-6GC1X9ZF9Y"
 }
+
+
 
 # Firebase Authentication
 firebase = pyrebase.initialize_app(firebaseConfig)
