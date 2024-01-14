@@ -83,7 +83,7 @@ def predict():
     skinCancer = st.selectbox("Do you have skin cancer?", options=("No", "Yes"))
 
     #Model selection
-    selectModel = st.selectbox("Select your preferable machine learning model", options=("Logistic Regression (Recommended)", "k-NN", "XGBoost"))
+    selectModel = st.selectbox("Select your preferable machine learning model", options=("Logistic Regression (Recommended)", "k-NN", "XGBoost", "Neural Network", "GaussianNB"))
     print(selectModel)
 
     dataToPredic = pd.DataFrame({
@@ -151,29 +151,43 @@ def predict():
     filename = 'LogRegModel.pkl'
     filename1 = 'knn.pkl'
     filename2 = 'xgb.pkl'
+    filename3 = 'NN.pkl'
+    filename4 = 'GNB.pkl'
 
-    loaded_model = pickle.load(open(filename, 'rb'))
-    loaded_model1 = pickle.load(open(filename1, 'rb'))
-    loaded_model2 = pickle.load(open(filename2, 'rb'))
+    logisticmodel = pickle.load(open(filename, 'rb'))
+    knnmodel = pickle.load(open(filename1, 'rb'))
+    xgbmodel = pickle.load(open(filename2, 'rb'))
+    nuralmodel = pickle.load(open(filename3, 'rb'))
+    gaussianmodel = pickle.load(open(filename4, 'rb'))
 
     finalResult = 0.0
     #print(loaded_model)
     if(selectModel == 'Logistic Regression (Recommended)'):
-        Result = loaded_model.predict(dataToPredic)
-        ResultProb = loaded_model.predict_proba(dataToPredic)
+        Result = logisticmodel.predict(dataToPredic)
+        ResultProb = logisticmodel.predict_proba(dataToPredic)
         finalResult = round(ResultProb[0][1] * 100, 2)
         print("logical regression", finalResult)
 
     elif(selectModel == 'k-NN'):
-        knnResult = loaded_model1.predict(dataToPredic)
-        knnResult1 = loaded_model.predict_proba(dataToPredic)
+        knnResult = knnmodel.predict(dataToPredic)
+        knnResult1 = knnmodel.predict_proba(dataToPredic)
         finalResult = round(knnResult1[0][1] * 100, 2)
         print("knn", finalResult)
-    else:
-        xgbResult = loaded_model2.predict(dataToPredic)
-        xgbResult1 = loaded_model.predict_proba(dataToPredic)
+    elif(selectModel == 'XGBoost'):
+        xgbResult = xgbmodel.predict(dataToPredic)
+        xgbResult1 = xgbmodel.predict_proba(dataToPredic)
         finalResult = round(xgbResult1[0][1] * 100, 2)
         print("xgb", finalResult)
+    elif(selectModel == 'Neural Network'):
+        nnresult = xgbmodel.predict(dataToPredic)
+        nnResult1 = xgbmodel.predict_proba(dataToPredic)
+        finalResult = round(nnResult1[0][1] * 100, 2)
+        print("Neural Network", finalResult)
+    else:
+        gnbResult = xgbmodel.predict(dataToPredic)
+        gnbResult1 = xgbmodel.predict_proba(dataToPredic)
+        finalResult = round(gnbResult1[0][1] * 100, 2)
+        print("Gaussian", finalResult)
 
     # Calculate the probability of getting heart disease
     if st.button('PREDICT'):
