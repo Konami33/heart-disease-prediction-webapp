@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import pickle
 from sklearn.linear_model import LogisticRegression
+from tensorflow.keras.models import load_model
+
 
 
 def home():
@@ -157,7 +159,7 @@ def predict():
     logisticmodel = pickle.load(open(filename, 'rb'))
     knnmodel = pickle.load(open(filename1, 'rb'))
     xgbmodel = pickle.load(open(filename2, 'rb'))
-    nuralmodel = pickle.load(open(filename3, 'rb'))
+    neuralmodel = pickle.load(open(filename3, 'rb'))
     gaussianmodel = pickle.load(open(filename4, 'rb'))
 
     finalResult = 0.0
@@ -179,13 +181,13 @@ def predict():
         finalResult = round(xgbResult1[0][1] * 100, 2)
         print("xgb", finalResult)
     elif(selectModel == 'Neural Network'):
-        nnresult = xgbmodel.predict(dataToPredic)
-        nnResult1 = xgbmodel.predict_proba(dataToPredic)
+        nnresult = neuralmodel.predict(dataToPredic)
+        nnResult1 = neuralmodel.predict_proba(dataToPredic)
         finalResult = round(nnResult1[0][1] * 100, 2)
         print("Neural Network", finalResult)
     else:
-        gnbResult = xgbmodel.predict(dataToPredic)
-        gnbResult1 = xgbmodel.predict_proba(dataToPredic)
+        gnbResult = gaussianmodel.predict(dataToPredic)
+        gnbResult1 = gaussianmodel.predict_proba(dataToPredic)
         finalResult = round(gnbResult1[0][1] * 100, 2)
         print("Gaussian", finalResult)
 
